@@ -1,7 +1,7 @@
 {
-  "name": "npm-package-template",
-  "version": "1.2.0",
-  "description": "A template for writing NPM packages.",
+  "name": "@oncommandio/js",
+  "version": "1.0.0",
+  "description": "Command API Wrapper",
   "main": "index.js",
   "scripts": {
     "build": "babel --presets env src -d ./ --ignore src/index.test.js",
@@ -10,20 +10,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cleverbeagle/npm-package-template"
+    "url": "git+https://github.com/oncommandio/js"
   },
   "keywords": [
     "npm",
     "package",
     "template"
   ],
-  "author": "cleverbeagle",
+  "author": "oncommandio",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/cleverbeagle/npm-package-template/issues"
   },
-  "homepage": "http://cleverbeagle.com/packages/template",
-  "dependencies": {},
+  "homepage": "https://docs.oncommand.io/api/libraries#javascript",
+  "dependencies": {
+    "axios": "^0.19.0"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
