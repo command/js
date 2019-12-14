@@ -1,56 +1,50 @@
 import axios from "axios";
 
 class Command {
-  constructor(apiKey, options) {
-    if (!apiKey) this.throwFormattedError("");
-    this._validateOptions(options);
-  }
-
-  _validateBehaviorKey(behaviorKey) {
-    const requiredFormatRegex = new RegExp(/[^_\W]+:[^_\W]+/g);
-    const matchedRequiredFormat = requiredFormatRegex.test(behaviorKey);
-
-    if (!matchedRequiredFormat) {
-      this.throwFormattedError(
-        `${behaviorKey} does not match the required format featureKey:behaviorKey.`
-      );
-    }
-  }
-
-  _validateTrackProperties(properties) {
-    if (!properties) return;
-    if (properties && typeof properties !== "object") {
-      this.throwFormattedError(
-        "Properties argument passed to command.track must be an object."
-      );
-    }
+  constructor(apiKey) {
+    if (!apiKey) this.throwFormattedError("A valid API key is required.");
+    this.apiKey = apiKey;
   }
 
   _throwFormattedError(error) {
     throw new Error(
-      `[Command] ${error} See https://docs.oncommand.io/api/libraries#javascript for detailed usage instructions.`
+      `[Command] ${error} See https://docs.oncommand.io/api/libraries#javascript for usage instructions.`
     );
   }
 
-  _request() {
+  _request(method, path, body) {
     axios({
-      method: "post",
-      url: "http://localhost:4000/api/v1"
+      method,
+      url: `http://localhost:4000/api/v1${path}`,
+      headers: {
+        "x-api-key": this.apiKey
+      },
+      body
     });
   }
 
-  track(behaviorKey, properties) {
-    this._validateBehaviorKey(behaviorKey);
-    this._validateTrackProperties(properties);
+  track(key, properties) {
+    return this._request("post", "/behavior", {
+      key,
+      properties
+    });
   }
 
-  _createCustomer() {
-    this.request("");
+  _createCustomer(customer) {
+    return this._request("post", "/customers", {
+      ...customer
+    });
   }
 
-  _updateCustomer() {}
+  _updateCustomer(customer) {
+    return this._request("put", `/customers/${customer._id}`, {
+      ...customer
+    });
+  }
 
-  _deleteCustomer() {}
+  _deleteCustomer(customerId) {
+    return this._request("delete", `/customers/${customerId}`);
+  }
 
   static customers = {
     create: this._createCustomer,

@@ -4,8 +4,8 @@
   "description": "Command API Wrapper",
   "main": "index.js",
   "scripts": {
-    "build": "babel --presets env src -d ./ --ignore src/index.test.js",
-    "dev": "babel --presets env src -d ./ --watch --ignore src/index.test.js",
+    "build": "browserify index.js -o index.min.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-proposal-object-rest-spread @babel/plugin-proposal-class-properties ] ] && uglifyjs index.min.js -c -m -o index.min.js",
+    "dev": "babel --presets @babel/preset-env src -d ./ --watch --ignore src/index.test.js",
     "test": "jest --watch"
   },
   "repository": {
@@ -27,9 +27,14 @@
     "axios": "^0.19.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-preset-env": "^1.6.0",
-    "jest": "^25.0.0"
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
+    "@babel/preset-env": "^7.7.6",
+    "babelify": "^10.0.0",
+    "browserify": "^16.5.0",
+    "jest": "^25.0.0",
+    "uglify-js": "^3.7.2"
   }
 }
