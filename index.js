@@ -57,6 +57,13 @@ function () {
       });
     }
   }, {
+    key: "_loginCustomer",
+    value: function _loginCustomer(customer) {
+      return this._request("put", "/customers/".concat(customer._id), {
+        lastSeenAt: new Date().toISOString()
+      });
+    }
+  }, {
     key: "_createCustomer",
     value: function _createCustomer(customer) {
       return this._request("post", "/customers", _objectSpread({}, customer));
@@ -77,6 +84,7 @@ function () {
 }();
 
 _defineProperty(Command, "customers", {
+  login: Command._loginCustomer,
   create: Command._createCustomer,
   update: Command._updateCustomer,
   "delete": Command._updateCustomer

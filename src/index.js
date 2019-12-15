@@ -30,15 +30,21 @@ class Command {
     });
   }
 
+  _loginCustomer(customerId) {
+    return this._request("put", `/customers/${customerId}`, {
+      lastSeenAt: new Date().toISOString()
+    });
+  }
+
   _createCustomer(customer) {
     return this._request("post", "/customers", {
       ...customer
     });
   }
 
-  _updateCustomer(customer) {
-    return this._request("put", `/customers/${customer._id}`, {
-      ...customer
+  _updateCustomer(customerId, update) {
+    return this._request("put", `/customers/${customerId}`, {
+      ...update
     });
   }
 
@@ -47,6 +53,7 @@ class Command {
   }
 
   static customers = {
+    login: this._loginCustomer,
     create: this._createCustomer,
     update: this._updateCustomer,
     delete: this._updateCustomer
