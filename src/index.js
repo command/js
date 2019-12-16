@@ -1,12 +1,13 @@
 import axios from "axios";
 
-class Command {
+class CommandAPI {
   constructor(apiKey) {
     if (!apiKey) this._throwFormattedError("A valid API key is required.");
     this.apiKey = apiKey;
 
     this.customers = {
       login: this._loginCustomer.bind(this),
+      logout: this._logoutCustomer.bind(this),
       create: this._createCustomer.bind(this),
       update: this._updateCustomer.bind(this),
       delete: this._deleteCustomer.bind(this)
@@ -43,6 +44,16 @@ class Command {
     if (!customerId) throw new Error("Must pass a customerId.");
 
     return this._request("put", `/customers/${customerId}`, {
+      isLoggedIn: true,
+      lastSeenAt: new Date().toISOString()
+    });
+  }
+
+  _logoutCustomer(customerId) {
+    if (!customerId) throw new Error("Must pass a customerId.");
+
+    return this._request("put", `/customers/${customerId}`, {
+      isLoggedIn: false,
       lastSeenAt: new Date().toISOString()
     });
   }
@@ -70,4 +81,8 @@ class Command {
   }
 }
 
-export default Command;
+if (typeof window === "object") {
+  window.Command = CommandAPI;
+}
+
+export default CommandAPI;

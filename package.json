@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "release": "node ./release.js",
-    "build": "browserify index.js -o index.min.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-proposal-object-rest-spread @babel/plugin-proposal-class-properties ] ] && uglifyjs index.min.js -c -m -o index.min.js",
+    "build": "babel --presets @babel/preset-env src -d ./ --ignore src/index.test.js && browserify index.js -o index.min.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-proposal-object-rest-spread @babel/plugin-proposal-class-properties ] ] && uglifyjs index.min.js -c -m -o index.min.js",
     "dev": "babel --presets @babel/preset-env src -d ./ --watch --ignore src/index.test.js",
     "test": "jest",
     "test-watch": "jest --watch"
@@ -34,6 +34,7 @@
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
     "@babel/preset-env": "^7.7.6",
+    "aws-sdk": "^2.590.0",
     "babelify": "^10.0.0",
     "browserify": "^16.5.0",
     "jest": "^25.0.0",

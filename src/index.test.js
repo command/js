@@ -57,6 +57,7 @@ describe("index.js", () => {
         "x-api-key": "apiKey123"
       },
       body: {
+        isLoggedIn: true,
         lastSeenAt: "2019-12-15T00:00:00.000Z"
       }
     });
@@ -66,6 +67,29 @@ describe("index.js", () => {
     expect(() => {
       const command = new Command("apiKey123");
       command.customers.login();
+    }).toThrow("Must pass a customerId.");
+  });
+
+  test("it can track a customer logout", () => {
+    const command = new Command("apiKey123");
+    command.customers.logout("1234");
+    expect(axios).toBeCalledWith({
+      method: "put",
+      url: `http://localhost:4000/api/v1/customers/1234`,
+      headers: {
+        "x-api-key": "apiKey123"
+      },
+      body: {
+        isLoggedIn: false,
+        lastSeenAt: "2019-12-15T00:00:00.000Z"
+      }
+    });
+  });
+
+  test("it throws an error if no customerId is passed to customers.logout", () => {
+    expect(() => {
+      const command = new Command("apiKey123");
+      command.customers.logout();
     }).toThrow("Must pass a customerId.");
   });
 

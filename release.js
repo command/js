@@ -1,4 +1,39 @@
 const { exec } = require("child_process");
+const fs = require("fs");
+const AWS = require("aws-sdk");
+const settings = require("./settings.js");
+
+AWS.config = new AWS.Config();
+AWS.config.accessKeyId = settings.aws.accessKeyId;
+AWS.config.secretAccessKey = settings.aws.secretAccessKey;
+
+AWS.config.update({
+  signatureVersion: "v4",
+  region: "us-east-2"
+});
+
+const s3 = new AWS.S3();
+
+const putFileOnS3 = (path, fileContents) => {
+  return new Promise((resolve, reject) => {
+    s3.putObject(
+      {
+        Bucket: "command-js",
+        ACL: "public-read",
+        Key: path,
+        Body: fileContents,
+        ContentType: "text/javascript"
+      },
+      (error, response) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      }
+    );
+  });
+};
 
 const promiseExec = (command, messageIfError) => {
   return new Promise((resolve, reject) => {
@@ -26,22 +61,29 @@ const release = async () => {
       throw new Error("Pass a version to release.");
     }
 
-    const majorVersion = getMajorVersion(version);
-
-    const tests = await promiseExec(
+    await promiseExec(
       "npm run test",
       "❌ Tests failed! Run npm test and correct errors before releasing. \n"
     );
-
     console.log("✅ Tests passed!");
 
     await promiseExec("npm run build");
     console.log("✅ Build complete!");
 
-    // await promiseExec(`git add . && git commit -m "release ${version}"`);
-    // console.log("✅ Release committed to repo!");
+    const majorVersion = getMajorVersion(version);
+    const scriptContents = fs.readFileSync("./index.min.js", "utf-8");
+    const developmentAPIRegex = new RegExp("http://localhost:4000", "ig");
+    const scriptContentsSanitized = scriptContents.replace(
+      developmentAPIRegex,
+      "https://api.oncommand.io"
+    );
 
-    // Upload to Amazon S3
+    // await promiseExec(`git add . && git commit -m "release ${version} && git push origin master"`);
+    // console.log("✅ Release committed and pushed to repo!");
+
+    await putFileOnS3(`${majorVersion}/index.js`, scriptContentsSanitized);
+    console.log("✅ Uploaded to Amazon S3!");
+
     // Release on NPM
   } catch (exception) {
     console.log(exception);
