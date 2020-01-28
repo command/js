@@ -21,6 +21,7 @@ class CommandAPI {
   }
 
   _request(method, path, body = {}) {
+    // NOTE: http://localhost:4000/api is dynamically swapped tp https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
     axios({
       method,
       url: `http://localhost:4000/api/v1${path}`,

@@ -72,7 +72,7 @@ const release = async () => {
 
     const majorVersion = getMajorVersion(version);
     const scriptContents = fs.readFileSync("./index.min.js", "utf-8");
-    const developmentAPIRegex = new RegExp("http://localhost:4000", "ig");
+    const developmentAPIRegex = new RegExp("http://localhost:4000/api", "ig");
     const scriptContentsSanitized = scriptContents.replace(
       developmentAPIRegex,
       "https://api.oncommand.io"
