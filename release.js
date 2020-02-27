@@ -191,20 +191,23 @@ const release = async version => {
     updateREADME(version);
     console.log("✅ README.md updated!");
 
-    // await commitReleaseToRepo(version);
-    // console.log("✅ Release committed to repo!");
+    await commitReleaseToRepo(version);
+    console.log("✅ Release committed to repo!");
 
-    // await pushReleaseToGit();
-    // console.log("✅ Release pushed to repo!");
+    await pushReleaseToGit();
+    console.log("✅ Release pushed to repo!");
 
-    // await tagReleaseOnGit(version);
-    // console.log("✅ Version tag pushed to remote repo!");
+    await tagReleaseOnGit(version);
+    console.log("✅ Version tag pushed to remote repo!");
 
-    // await uploadScriptToS3(`${getMajorVerison(version)}/index.min.js`, fs.readFileSync('./index.min.js', 'utf-8'));
-    // console.log("✅ Uploaded to Amazon S3!");
+    await uploadScriptToS3(
+      `${getMajorVerison(version)}/index.min.js`,
+      fs.readFileSync("./index.min.js", "utf-8")
+    );
+    console.log("✅ Uploaded to Amazon S3!");
 
-    // await releaseToNPM(version);
-    // console.log("✅ Released to NPM!");
+    await releaseToNPM(version);
+    console.log("✅ Released to NPM!");
   } catch (exception) {
     console.warn(`[release] ${exception.message}`);
   }
