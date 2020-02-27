@@ -84,7 +84,7 @@ const release = async () => {
     const packageJsonContents = fs.readFileSync("./package.json", "utf-8");
     const packageJson = JSON.parse(packageJsonContents);
     packageJson.homepage = `https://portal.oncommand.io/docs/command-js/${version}/introduction`;
-    const stringifiedPackageJson = JSON.stringify(packageJson);
+    const stringifiedPackageJson = JSON.stringify(packageJson, null, 2);
 
     fs.writeFileSync("./package.json", stringifiedPackageJson);
     console.log("✅ Homepage updated in package.json!");
