@@ -78,6 +78,17 @@ const release = async () => {
       "https://api.oncommand.io"
     );
 
+    fs.writeFileSync("./index.min.js", scriptContentsSanitized);
+    console.log("✅ Production URLs updated!");
+
+    const packageJsonContents = fs.readFileSync("./package.json", "utf-8");
+    const packageJson = JSON.parse(packageJsonContents);
+    packageJson.homepage = `https://portal.oncommand.io/docs/command-js/${version}/introduction`;
+    const stringifiedPackageJson = JSON.stringify(packageJson);
+
+    fs.writeFileSync("./package.json", stringifiedPackageJson);
+    console.log("✅ Homepage updated in package.json!");
+
     await promiseExec(
       `git tag -a ${version} -m "release ${version}" && git push origin ${version}`
     );
