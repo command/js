@@ -78,8 +78,10 @@ const release = async () => {
       "https://api.oncommand.io"
     );
 
-    // await promiseExec(`git add . && git commit -m "release ${version} && git push origin master"`);
-    // console.log("✅ Release committed and pushed to repo!");
+    await promiseExec(
+      `git add . && git commit -m "release ${version} && git push origin master"`
+    );
+    console.log("✅ Release committed and pushed to repo!");
 
     await putFileOnS3(`${majorVersion}/index.js`, scriptContentsSanitized);
     console.log("✅ Uploaded to Amazon S3!");
@@ -91,11 +93,3 @@ const release = async () => {
 };
 
 release();
-
-// npm run build
-// git add .
-// git commit -m "release "$1""
-// npm version "$1"
-// npm publish
-
-// exit 0
