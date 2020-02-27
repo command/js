@@ -31,6 +31,7 @@ function () {
 
     if (!apiKey) this._throwFormattedError("A valid API key is required.");
     this.apiKey = apiKey;
+    this.version = "";
     this.customers = {
       login: this._loginCustomer.bind(this),
       logout: this._logoutCustomer.bind(this),
@@ -43,13 +44,13 @@ function () {
   _createClass(CommandAPI, [{
     key: "_throwFormattedError",
     value: function _throwFormattedError(error) {
-      throw new Error("[Command] ".concat(error, " See https://docs.oncommand.io/api/libraries#javascript for usage instructions."));
+      throw new Error("[Command] ".concat(error, " See https://portal.oncommand.io/docs/command-js/").concat(this.version, "/introduction."));
     }
   }, {
     key: "_request",
     value: function _request(method, path) {
       var body = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-      // NOTE: http://localhost:4000/api is dynamically swapped tp https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
+      // NOTE: http://localhost:4000/api is dynamically swapped to https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
       (0, _axios["default"])({
         method: method,
         url: "http://localhost:4000/api/v1".concat(path),
