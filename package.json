@@ -21,7 +21,7 @@
   ],
   "author": "oncommandio",
   "license": "MIT",
-  "homepage": "https://portal.oncommand.io/docs/command-js/0.6.0/introduction",
+  "homepage": "https://portal.oncommand.io/docs/command-js/0.7.0/introduction",
   "dependencies": {
     "axios": "^0.19.0"
   },

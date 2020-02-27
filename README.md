@@ -2,4 +2,4 @@
 
 Official JavaScript library for the Command API.
 
-[Read the Documentation](https://portal.oncommand.io/docs/command-js/0.6.0/libraries#javascript)
+[Read the Documentation](https://portal.oncommand.io/docs/command-js/0.7.0/introduction)
