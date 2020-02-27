@@ -1,4 +1,5 @@
-#### NPM Package Template
-A template for writing NPM packages.
+## Command.js
 
-[Read the Documentation](http://cleverbeagle.com/packages/template)
+Official JavaScript library for the Command API.
+
+[Read the Documentation](https://portal.oncommand.io/docs/api/1.0.0/libraries#javascript)

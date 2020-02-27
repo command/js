@@ -1,7 +1,7 @@
 {
   "name": "@oncommandio/js",
   "version": "0.1.0",
-  "description": "Command API Wrapper",
+  "description": "Official JavaScript library for the Command API.",
   "main": "index.js",
   "scripts": {
     "release": "node ./release.js",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oncommandio/js"
+    "url": "git+https://github.com/command/js"
   },
   "keywords": [
     "npm",
@@ -21,10 +21,7 @@
   ],
   "author": "oncommandio",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cleverbeagle/npm-package-template/issues"
-  },
-  "homepage": "https://docs.oncommand.io/api/libraries#javascript",
+  "homepage": "https://portal.oncommand.io/docs/api/1.0.0/libraries#javascript",
   "dependencies": {
     "axios": "^0.19.0"
   },

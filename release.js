@@ -79,14 +79,14 @@ const release = async () => {
     );
 
     await promiseExec(
-      `git add . && git commit -m "release ${version} && git push origin master"`
+      `git tag -a ${version} -m "release ${version}" && git push origin ${version}`
     );
-    console.log("✅ Release committed and pushed to repo!");
+    console.log("✅ Version tag pushed to repo!");
 
     await putFileOnS3(`${majorVersion}/index.js`, scriptContentsSanitized);
     console.log("✅ Uploaded to Amazon S3!");
 
-    await promiseExec(`npm publish --access public`); // NOTE: --access public is due to the scoped package (@oncommandio/js).
+    await promiseExec(`npm version ${version} && npm publish --access public`); // NOTE: --access public is due to the scoped package (@oncommandio/js).
     console.log("✅ Released to NPM!");
   } catch (exception) {
     console.log(exception);
