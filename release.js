@@ -89,12 +89,18 @@ const release = async () => {
     fs.writeFileSync("./package.json", stringifiedPackageJson);
     console.log("✅ Homepage updated in package.json!");
 
+    await promiseExec(`git add . && git commit -m "release ${version}"`);
+    console.log("✅ Committed to repo!");
+
     await promiseExec(
       `git tag -a ${version} -m "release ${version}" && git push origin ${version}`
     );
     console.log("✅ Version tag pushed to repo!");
 
-    await putFileOnS3(`${majorVersion}/index.js`, scriptContentsSanitized);
+    await promiseExec(`git push origin master`);
+    console.log("✅ Code pushed to repo!");
+
+    await putFileOnS3(`${majorVersion}/index.min.js`, scriptContentsSanitized);
     console.log("✅ Uploaded to Amazon S3!");
 
     await promiseExec(`npm version ${version} && npm publish --access public`); // NOTE: --access public is due to the scoped package (@oncommandio/js).
