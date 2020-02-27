@@ -89,6 +89,15 @@ const release = async () => {
     fs.writeFileSync("./package.json", stringifiedPackageJson);
     console.log("✅ Homepage updated in package.json!");
 
+    fs.writeFileSync(
+      "./README.md",
+      `## Command.js
+      Official JavaScript library for the Command API.
+      [Read the Documentation](https://portal.oncommand.io/docs/api/${version}/libraries#javascript)
+    `
+    );
+    console.log("✅ README.md updated!");
+
     await promiseExec(`git add . && git commit -m "release ${version}"`);
     console.log("✅ Committed to repo!");
 
