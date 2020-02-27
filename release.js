@@ -91,8 +91,7 @@ const release = async () => {
 
     fs.writeFileSync(
       "./README.md",
-      `## Command.js\n\nOfficial JavaScript library for the Command API.\n\n[Read the Documentation](https://portal.oncommand.io/docs/api/${version}/libraries#javascript)
-    `
+      `## Command.js\n\nOfficial JavaScript library for the Command API.\n\n[Read the Documentation](https://portal.oncommand.io/docs/command-js/${version}/introduction)`
     );
     console.log("✅ README.md updated!");
 
