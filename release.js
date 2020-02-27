@@ -86,7 +86,8 @@ const release = async () => {
     await putFileOnS3(`${majorVersion}/index.js`, scriptContentsSanitized);
     console.log("✅ Uploaded to Amazon S3!");
 
-    // Release on NPM
+    await promiseExec(`npm publish --access public`); // NOTE: --access public is due to the scoped package (@oncommandio/js).
+    console.log("✅ Released to NPM!");
   } catch (exception) {
     console.log(exception);
   }
