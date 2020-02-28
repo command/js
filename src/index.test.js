@@ -34,7 +34,7 @@ describe("index.js", () => {
       headers: {
         "x-api-key": "apiKey123"
       },
-      body: {
+      data: {
         key: "an event"
       }
     });
@@ -56,7 +56,7 @@ describe("index.js", () => {
       headers: {
         "x-api-key": "apiKey123"
       },
-      body: {
+      data: {
         isLoggedIn: true,
         lastSeenAt: "2019-12-15T00:00:00.000Z"
       }
@@ -79,7 +79,7 @@ describe("index.js", () => {
       headers: {
         "x-api-key": "apiKey123"
       },
-      body: {
+      data: {
         isLoggedIn: false,
         lastSeenAt: "2019-12-15T00:00:00.000Z"
       }
@@ -102,7 +102,7 @@ describe("index.js", () => {
       headers: {
         "x-api-key": "apiKey123"
       },
-      body: {
+      data: {
         emailAddress: "test@test.com"
       }
     });
@@ -126,7 +126,7 @@ describe("index.js", () => {
       headers: {
         "x-api-key": "apiKey123"
       },
-      body: {
+      data: {
         emailAddress: "test1@test.com"
       }
     });
@@ -155,7 +155,7 @@ describe("index.js", () => {
       headers: {
         "x-api-key": "apiKey123"
       },
-      body: {}
+      data: {}
     });
   });
 

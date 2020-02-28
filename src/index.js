@@ -21,7 +21,7 @@ class CommandAPI {
     );
   }
 
-  _request(method, path, body = {}) {
+  _request(method, path, data = {}) {
     // NOTE: http://localhost:4000/api is dynamically swapped to https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
     axios({
       method,
@@ -29,7 +29,7 @@ class CommandAPI {
       headers: {
         "x-api-key": this.apiKey
       },
-      body
+      data
     }).catch(error => {
       if (error && error.response) {
         console.warn(

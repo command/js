@@ -49,7 +49,7 @@ function () {
   }, {
     key: "_request",
     value: function _request(method, path) {
-      var body = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+      var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
       // NOTE: http://localhost:4000/api is dynamically swapped to https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
       (0, _axios["default"])({
         method: method,
@@ -57,7 +57,7 @@ function () {
         headers: {
           "x-api-key": this.apiKey
         },
-        body: body
+        data: data
       })["catch"](function (error) {
         if (error && error.response) {
           console.warn("[".concat(error.response.status, "] ").concat(error.response.data.data.error));
