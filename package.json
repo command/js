@@ -2,7 +2,7 @@
   "name": "@oncommandio/js",
   "version": "0.10.0",
   "description": "Official JavaScript library for the Command API.",
-  "main": "index.js",
+  "main": "index.min.js",
   "scripts": {
     "release": "node ./release.js",
     "build": "babel --presets @babel/preset-env src -d ./ --ignore src/index.test.js && browserify index.js -o index.min.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-proposal-object-rest-spread @babel/plugin-proposal-class-properties ] ] && uglifyjs index.min.js -c -m -o index.min.js",
