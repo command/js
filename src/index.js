@@ -30,8 +30,18 @@ class CommandAPI {
         "x-api-key": this.apiKey
       },
       body
-    }).then(response => {
-      console.log(response);
+    }).catch(error => {
+      if (error.response) {
+        console.warn(error.response);
+      }
+
+      if (error.request) {
+        console.log(error.request);
+      }
+
+      if (error.message) {
+        console.warn(error.message);
+      }
     });
   }
 

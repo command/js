@@ -58,8 +58,18 @@ function () {
           "x-api-key": this.apiKey
         },
         body: body
-      }).then(function (response) {
-        console.log(response);
+      })["catch"](function (error) {
+        if (error.response) {
+          console.warn(error.response);
+        }
+
+        if (error.request) {
+          console.log(error.request);
+        }
+
+        if (error.message) {
+          console.warn(error.message);
+        }
       });
     }
   }, {
