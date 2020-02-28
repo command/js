@@ -5,6 +5,7 @@ class CommandAPI {
     if (!apiKey) this._throwFormattedError("A valid API key is required.");
     this.apiKey = apiKey;
     this.version = "";
+    this.customerId = null;
 
     this.customers = {
       login: this._loginCustomer.bind(this),
@@ -23,27 +24,31 @@ class CommandAPI {
 
   _request(method, path, data = {}) {
     // NOTE: http://localhost:4000/api is dynamically swapped to https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
-    axios({
+    return axios({
       method,
       url: `http://localhost:4000/api/v1${path}`,
       headers: {
         "x-api-key": this.apiKey
       },
       data
-    }).catch(error => {
-      if (error && error.response) {
-        console.warn(
-          `[${error.response.status}] ${error.response.data.data.error}`
-        );
-        console.warn(error.response.data.data);
-      }
-    });
+    })
+      .then(response => resposne)
+      .catch(error => {
+        if (error && error.response) {
+          console.warn(
+            `[${error.response.status}] ${error.response.data.data.error}`
+          );
+          console.warn(error.response.data.data);
+        }
+      });
   }
 
   track(key, properties) {
     if (!key) throw new Error("Must pass a key to track.");
 
     const body = { key };
+
+    if (this.customerId) body.customerId = this.customerId;
     if (properties) body.properties = properties;
 
     return this._request("post", "/behavior", body);
@@ -51,6 +56,8 @@ class CommandAPI {
 
   _loginCustomer(customerId) {
     if (!customerId) throw new Error("Must pass a customerId.");
+
+    this.customerId = customerId;
 
     return this._request("put", `/customers/${customerId}`, {
       isLoggedIn: true,
@@ -60,6 +67,8 @@ class CommandAPI {
 
   _logoutCustomer(customerId) {
     if (!customerId) throw new Error("Must pass a customerId.");
+
+    this.customerId = null;
 
     return this._request("put", `/customers/${customerId}`, {
       isLoggedIn: false,

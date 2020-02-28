@@ -32,6 +32,7 @@ function () {
     if (!apiKey) this._throwFormattedError("A valid API key is required.");
     this.apiKey = apiKey;
     this.version = "";
+    this.customerId = null;
     this.customers = {
       login: this._loginCustomer.bind(this),
       logout: this._logoutCustomer.bind(this),
@@ -51,13 +52,15 @@ function () {
     value: function _request(method, path) {
       var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
       // NOTE: http://localhost:4000/api is dynamically swapped to https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
-      (0, _axios["default"])({
+      return (0, _axios["default"])({
         method: method,
         url: "http://localhost:4000/api/v1".concat(path),
         headers: {
           "x-api-key": this.apiKey
         },
         data: data
+      }).then(function (response) {
+        return resposne;
       })["catch"](function (error) {
         if (error && error.response) {
           console.warn("[".concat(error.response.status, "] ").concat(error.response.data.data.error));
@@ -72,6 +75,7 @@ function () {
       var body = {
         key: key
       };
+      if (this.customerId) body.customerId = this.customerId;
       if (properties) body.properties = properties;
       return this._request("post", "/behavior", body);
     }
@@ -79,6 +83,7 @@ function () {
     key: "_loginCustomer",
     value: function _loginCustomer(customerId) {
       if (!customerId) throw new Error("Must pass a customerId.");
+      this.customerId = customerId;
       return this._request("put", "/customers/".concat(customerId), {
         isLoggedIn: true,
         lastSeenAt: new Date().toISOString()
@@ -88,6 +93,7 @@ function () {
     key: "_logoutCustomer",
     value: function _logoutCustomer(customerId) {
       if (!customerId) throw new Error("Must pass a customerId.");
+      this.customerId = null;
       return this._request("put", "/customers/".concat(customerId), {
         isLoggedIn: false,
         lastSeenAt: new Date().toISOString()
