@@ -60,7 +60,7 @@ function () {
         },
         data: data
       }).then(function (response) {
-        return resposne;
+        return response;
       })["catch"](function (error) {
         console.warn(error);
 

@@ -32,7 +32,7 @@ class CommandAPI {
       },
       data
     })
-      .then(response => resposne)
+      .then(response => response)
       .catch(error => {
         console.warn(error);
         if (error && error.response) {
