@@ -63,8 +63,10 @@ function () {
         return resposne;
       })["catch"](function (error) {
         if (error && error.response) {
-          console.warn("[".concat(error.response.status, "] ").concat(error.response.data.data.error));
-          console.warn(error.response.data.data);
+          var status = error.response.status;
+          var errorMessage = error.response && error.response.data && errorr.response.data.error;
+          console.warn("[".concat(status, "] ").concat(errorMessage));
+          if (error.response.data) console.warn(error.response.data);
         }
       });
     }
