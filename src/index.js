@@ -30,6 +30,8 @@ class CommandAPI {
         "x-api-key": this.apiKey
       },
       body
+    }).catch(error => {
+      console.warn(error);
     });
   }
 

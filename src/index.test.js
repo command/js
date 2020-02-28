@@ -6,7 +6,7 @@ jest.mock("axios");
 describe("index.js", () => {
   beforeEach(() => {
     axios.mockReset();
-    axios.mockImplementation(() => {});
+    axios.mockImplementation(() => Promise.resolve());
 
     // NOTE: Mock global Date constructor so all dates match in test.
     global.Date = jest.fn(() => ({
@@ -28,7 +28,7 @@ describe("index.js", () => {
   test("it can track an event", () => {
     const command = new Command("apiKey123");
     command.track("an event");
-    expect(axios).toBeCalledWith({
+    expect(axios).toHaveBeenCalledWith({
       method: "post",
       url: `http://localhost:4000/api/v1/behavior`,
       headers: {
@@ -50,7 +50,7 @@ describe("index.js", () => {
   test("it can track a customer login", () => {
     const command = new Command("apiKey123");
     command.customers.login("1234");
-    expect(axios).toBeCalledWith({
+    expect(axios).toHaveBeenCalledWith({
       method: "put",
       url: `http://localhost:4000/api/v1/customers/1234`,
       headers: {
@@ -73,7 +73,7 @@ describe("index.js", () => {
   test("it can track a customer logout", () => {
     const command = new Command("apiKey123");
     command.customers.logout("1234");
-    expect(axios).toBeCalledWith({
+    expect(axios).toHaveBeenCalledWith({
       method: "put",
       url: `http://localhost:4000/api/v1/customers/1234`,
       headers: {
@@ -96,7 +96,7 @@ describe("index.js", () => {
   test("it can create a customer", () => {
     const command = new Command("apiKey123");
     command.customers.create({ emailAddress: "test@test.com" });
-    expect(axios).toBeCalledWith({
+    expect(axios).toHaveBeenCalledWith({
       method: "post",
       url: `http://localhost:4000/api/v1/customers`,
       headers: {
@@ -120,7 +120,7 @@ describe("index.js", () => {
     command.customers.update("customerId123", {
       emailAddress: "test1@test.com"
     });
-    expect(axios).toBeCalledWith({
+    expect(axios).toHaveBeenCalledWith({
       method: "put",
       url: `http://localhost:4000/api/v1/customers/customerId123`,
       headers: {
@@ -149,7 +149,7 @@ describe("index.js", () => {
   test("it can delete a customer", () => {
     const command = new Command("apiKey123");
     command.customers.delete("customerId123");
-    expect(axios).toBeCalledWith({
+    expect(axios).toHaveBeenCalledWith({
       method: "delete",
       url: `http://localhost:4000/api/v1/customers/customerId123`,
       headers: {
