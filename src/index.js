@@ -34,6 +34,7 @@ class CommandAPI {
     })
       .then(response => resposne)
       .catch(error => {
+        console.warn(error);
         if (error && error.response) {
           const { status } = error.response;
           const errorMessage =
