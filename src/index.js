@@ -35,10 +35,11 @@ class CommandAPI {
       .then(response => resposne)
       .catch(error => {
         if (error && error.response) {
-          console.warn(
-            `[${error.response.status}] ${error.response.data.data.error}`
-          );
-          console.warn(error.response.data.data);
+          const { status } = error.response;
+          const errorMessage =
+            error.response && error.response.data && errorr.response.data.error;
+          console.warn(`[${status}] ${errorMessage}`);
+          if (error.response.data) console.warn(error.response.data);
         }
       });
   }
