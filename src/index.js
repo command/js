@@ -31,16 +31,11 @@ class CommandAPI {
       },
       body
     }).catch(error => {
-      if (error.response) {
-        console.warn(error.response);
-      }
-
-      if (error.request) {
-        console.log(error.request);
-      }
-
-      if (error.message) {
-        console.warn(error.message);
+      if (error && error.response) {
+        console.warn(
+          `[${error.response.status}] ${error.response.data.data.error}`
+        );
+        console.warn(error.response.data.data);
       }
     });
   }

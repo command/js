@@ -59,16 +59,9 @@ function () {
         },
         body: body
       })["catch"](function (error) {
-        if (error.response) {
-          console.warn(error.response);
-        }
-
-        if (error.request) {
-          console.log(error.request);
-        }
-
-        if (error.message) {
-          console.warn(error.message);
+        if (error && error.response) {
+          console.warn("[".concat(error.response.status, "] ").concat(error.response.data.data.error));
+          console.warn(error.response.data.data);
         }
       });
     }
