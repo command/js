@@ -1,6 +1,6 @@
 {
   "name": "@oncommandio/js",
-  "version": "0.27.0",
+  "version": "0.28.0",
   "description": "Official JavaScript library for the Command API.",
   "main": "index.min.js",
   "scripts": {
