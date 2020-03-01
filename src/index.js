@@ -37,7 +37,7 @@ class CommandAPI {
         if (error && error.response) {
           const { status } = error.response;
           const errorMessage =
-            error.response && error.response.data && errorr.response.data.error;
+            error.response && error.response.data && error.response.data.error;
           console.warn(`[${status}] ${errorMessage}`);
           if (error.response.data) console.warn(error.response.data);
         }
