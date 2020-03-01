@@ -35,7 +35,9 @@ const promiseExec = (command, messageIfError) => {
 
 const releaseToNPM = async version => {
   try {
-    await promiseExec(`npm version ${version} && npm publish --access public`); // NOTE: --access public is due to the scoped package (@oncommandio/js).
+    await promiseExec(
+      `npm version ${version} && npm publish --access public --allow-same-version`
+    ); // NOTE: --access public is due to the scoped package (@oncommandio/js).
   } catch (exception) {
     throw new Error(`[release.releaseToNPM] ${exception.message}`);
   }
