@@ -64,7 +64,7 @@ function () {
       })["catch"](function (error) {
         if (error && error.response) {
           var status = error.response.status;
-          var errorMessage = error.response && error.response.data && errorr.response.data.error;
+          var errorMessage = error.response && error.response.data && error.response.data.error;
           console.warn("[".concat(status, "] ").concat(errorMessage));
           if (error.response.data) console.warn(error.response.data);
         }
