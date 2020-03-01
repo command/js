@@ -52,14 +52,6 @@ function () {
     value: function _request(method, path) {
       var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
       // NOTE: http://localhost:4000/api is dynamically swapped to https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
-      console.log("COMMANDJS REQUEST", {
-        method: method,
-        url: "http://localhost:4000/api/v1".concat(path),
-        headers: {
-          "x-api-key": this.apiKey
-        },
-        data: data
-      });
       return (0, _axios["default"])({
         method: method,
         url: "http://localhost:4000/api/v1".concat(path),
@@ -70,8 +62,6 @@ function () {
       }).then(function (response) {
         return response;
       })["catch"](function (error) {
-        console.warn(error);
-
         if (error && error.response) {
           var status = error.response.status;
           var errorMessage = error.response && error.response.data && errorr.response.data.error;
