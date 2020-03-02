@@ -27,12 +27,15 @@ var CommandAPI =
 /*#__PURE__*/
 function () {
   function CommandAPI(apiKey) {
+    var customerId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
     _classCallCheck(this, CommandAPI);
 
     if (!apiKey) this._throwFormattedError("A valid API key is required.");
     this.apiKey = apiKey;
     this.version = "";
-    this.customerId = null;
+    this.customerId = customerId; // NOTE: Enables manually passing a customerId in server environments.
+
     this.customers = {
       login: this._loginCustomer.bind(this),
       logout: this._logoutCustomer.bind(this),
@@ -76,7 +79,15 @@ function () {
           var status = error.response.status;
           var errorMessage = error.response && error.response.data && error.response.data && error.response.data.data && error.response.data.data.error;
           console.warn("[".concat(status, "] ").concat(errorMessage));
-          if (error.response.data) console.warn(error.response.data);
+
+          if (error.response.data) {
+            console.warn(error.response.data);
+          }
+
+          if (error.response.data && error.response.data.data) {
+            console.warn(error.response.data.data.error);
+            console.warn(error.response.data.data.validationErrors);
+          }
         }
       });
     }

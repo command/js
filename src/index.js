@@ -1,11 +1,11 @@
 import axios from "axios";
 
 class CommandAPI {
-  constructor(apiKey) {
+  constructor(apiKey, customerId = null) {
     if (!apiKey) this._throwFormattedError("A valid API key is required.");
     this.apiKey = apiKey;
     this.version = "";
-    this.customerId = null;
+    this.customerId = customerId; // NOTE: Enables manually passing a customerId in server environments.
 
     this.customers = {
       login: this._loginCustomer.bind(this),
@@ -54,7 +54,14 @@ class CommandAPI {
             error.response.data.data &&
             error.response.data.data.error;
           console.warn(`[${status}] ${errorMessage}`);
-          if (error.response.data) console.warn(error.response.data);
+          if (error.response.data) {
+            console.warn(error.response.data);
+          }
+
+          if (error.response.data && error.response.data.data) {
+            console.warn(error.response.data.data.error);
+            console.warn(error.response.data.data.validationErrors);
+          }
         }
       });
   }
