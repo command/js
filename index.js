@@ -27,15 +27,15 @@ var CommandAPI =
 /*#__PURE__*/
 function () {
   function CommandAPI(apiKey) {
-    var customerId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     _classCallCheck(this, CommandAPI);
 
     if (!apiKey) this._throwFormattedError("A valid API key is required.");
     this.apiKey = apiKey;
     this.version = "";
-    this.customerId = customerId; // NOTE: Enables manually passing a customerId in server environments.
-
+    this.customerId = options.customerId || null;
+    this.debug = options.debug || false;
     this.customers = {
       login: this._loginCustomer.bind(this),
       logout: this._logoutCustomer.bind(this),
@@ -46,6 +46,12 @@ function () {
   }
 
   _createClass(CommandAPI, [{
+    key: "_logDebugMessage",
+    value: function _logDebugMessage(message) {
+      console.log("[[[ Command.js DEBUG ]]]");
+      console.log(message);
+    }
+  }, {
     key: "_throwFormattedError",
     value: function _throwFormattedError(error) {
       throw new Error("[Command] ".concat(error, " See https://portal.oncommand.io/docs/command-js/").concat(this.version, "/introduction."));
@@ -53,17 +59,23 @@ function () {
   }, {
     key: "_request",
     value: function _request(method, path) {
+      var _this = this;
+
       var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
       var callback = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
-      // NOTE: http://localhost:4000/api is dynamically swapped to https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
-      console.log({
-        method: method,
-        url: "http://localhost:4000/api/v1".concat(path),
-        headers: {
-          "x-api-key": this.apiKey
-        },
-        data: data
-      });
+
+      if (this.debug) {
+        this._logDebugMessage({
+          method: method,
+          url: "http://localhost:4000/api/v1".concat(path),
+          headers: {
+            "x-api-key": this.apiKey
+          },
+          data: data
+        });
+      } // NOTE: http://localhost:4000/api is dynamically swapped to https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
+
+
       return (0, _axios["default"])({
         method: method,
         url: "http://localhost:4000/api/v1".concat(path),
@@ -84,9 +96,10 @@ function () {
             console.warn(error.response.data);
           }
 
-          if (error.response.data && error.response.data.data) {
-            console.warn(error.response.data.data.error);
-            console.warn(error.response.data.data.validationErrors);
+          if (_this.debug && error.response.data && error.response.data.data) {
+            _this._logDebugMessage(error.response.data.data.error);
+
+            _this._logDebugMessage(error.response.data.data.validationErrors);
           }
         }
       });
@@ -114,13 +127,13 @@ function () {
   }, {
     key: "_logoutCustomer",
     value: function _logoutCustomer(customerId) {
-      var _this = this;
+      var _this2 = this;
 
       if (!customerId && !this.customerId) throw new Error("Must have a customerId to logout.");
       return this._request("put", "/customers/logout", {
         customerId: customerId || this.customerId
       }, function () {
-        _this.customerId = null;
+        _this2.customerId = null;
       });
     }
   }, {

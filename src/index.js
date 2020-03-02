@@ -1,11 +1,12 @@
 import axios from "axios";
 
 class CommandAPI {
-  constructor(apiKey, customerId = null) {
+  constructor(apiKey, options = {}) {
     if (!apiKey) this._throwFormattedError("A valid API key is required.");
     this.apiKey = apiKey;
     this.version = "";
-    this.customerId = customerId; // NOTE: Enables manually passing a customerId in server environments.
+    this.customerId = options.customerId || null;
+    this.debug = options.debug || false;
 
     this.customers = {
       login: this._loginCustomer.bind(this),
@@ -16,6 +17,11 @@ class CommandAPI {
     };
   }
 
+  _logDebugMessage(message) {
+    console.log("[[[ Command.js DEBUG ]]]");
+    console.log(message);
+  }
+
   _throwFormattedError(error) {
     throw new Error(
       `[Command] ${error} See https://portal.oncommand.io/docs/command-js/${this.version}/introduction.`
@@ -23,15 +29,18 @@ class CommandAPI {
   }
 
   _request(method, path, data = {}, callback = null) {
+    if (this.debug) {
+      this._logDebugMessage({
+        method,
+        url: `http://localhost:4000/api/v1${path}`,
+        headers: {
+          "x-api-key": this.apiKey
+        },
+        data
+      });
+    }
+
     // NOTE: http://localhost:4000/api is dynamically swapped to https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
-    console.log({
-      method,
-      url: `http://localhost:4000/api/v1${path}`,
-      headers: {
-        "x-api-key": this.apiKey
-      },
-      data
-    });
     return axios({
       method,
       url: `http://localhost:4000/api/v1${path}`,
@@ -53,14 +62,16 @@ class CommandAPI {
             error.response.data &&
             error.response.data.data &&
             error.response.data.data.error;
+
           console.warn(`[${status}] ${errorMessage}`);
+
           if (error.response.data) {
             console.warn(error.response.data);
           }
 
-          if (error.response.data && error.response.data.data) {
-            console.warn(error.response.data.data.error);
-            console.warn(error.response.data.data.validationErrors);
+          if (this.debug && error.response.data && error.response.data.data) {
+            this._logDebugMessage(error.response.data.data.error);
+            this._logDebugMessage(error.response.data.data.validationErrors);
           }
         }
       });
