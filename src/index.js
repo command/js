@@ -22,7 +22,7 @@ class CommandAPI {
     );
   }
 
-  _request(method, path, data = {}) {
+  _request(method, path, data = {}, callback = null) {
     // NOTE: http://localhost:4000/api is dynamically swapped to https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
     return axios({
       method,
@@ -32,7 +32,10 @@ class CommandAPI {
       },
       data
     })
-      .then(response => response)
+      .then(response => {
+        if (callbak) callback(response);
+        return response;
+      })
       .catch(error => {
         if (error && error.response) {
           const { status } = error.response;
@@ -69,14 +72,21 @@ class CommandAPI {
     });
   }
 
-  _logoutCustomer(customerId) {
+  _logoutCustomer() {
     if (!customerId) throw new Error("Must pass a customerId.");
 
-    this.customerId = null;
+    console.log(this.customerId);
 
-    return this._request("put", `/customers/logout`, {
-      customerId
-    });
+    return this._request(
+      "put",
+      `/customers/logout`,
+      {
+        customerId: this.customerId
+      },
+      () => {
+        this.customerId = null;
+      }
+    );
   }
 
   _createCustomer(customer) {
