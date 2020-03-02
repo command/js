@@ -113,12 +113,12 @@ function () {
     }
   }, {
     key: "_logoutCustomer",
-    value: function _logoutCustomer() {
+    value: function _logoutCustomer(customerId) {
       var _this = this;
 
-      if (!this.customerId) throw new Error("Must have a customerId to logout.");
+      if (!customerId && !this.customerId) throw new Error("Must have a customerId to logout.");
       return this._request("put", "/customers/logout", {
-        customerId: this.customerId
+        customerId: customerId || this.customerId
       }, function () {
         _this.customerId = null;
       });
