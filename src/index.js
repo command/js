@@ -64,9 +64,8 @@ class CommandAPI {
 
     this.customerId = customerId;
 
-    return this._request("put", `/customers/${customerId}`, {
-      isLoggedIn: true,
-      lastSeenAt: new Date().toISOString()
+    return this._request("put", `/customers/login`, {
+      customerId
     });
   }
 
@@ -75,9 +74,8 @@ class CommandAPI {
 
     this.customerId = null;
 
-    return this._request("put", `/customers/${customerId}`, {
-      isLoggedIn: false,
-      lastSeenAt: new Date().toISOString()
+    return this._request("put", `/customers/logout`, {
+      customerId
     });
   }
 

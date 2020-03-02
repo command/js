@@ -86,9 +86,8 @@ function () {
     value: function _loginCustomer(customerId) {
       if (!customerId) throw new Error("Must pass a customerId.");
       this.customerId = customerId;
-      return this._request("put", "/customers/".concat(customerId), {
-        isLoggedIn: true,
-        lastSeenAt: new Date().toISOString()
+      return this._request("put", "/customers/login", {
+        customerId: customerId
       });
     }
   }, {
@@ -96,9 +95,8 @@ function () {
     value: function _logoutCustomer(customerId) {
       if (!customerId) throw new Error("Must pass a customerId.");
       this.customerId = null;
-      return this._request("put", "/customers/".concat(customerId), {
-        isLoggedIn: false,
-        lastSeenAt: new Date().toISOString()
+      return this._request("put", "/customers/logout", {
+        customerId: customerId
       });
     }
   }, {

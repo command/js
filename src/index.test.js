@@ -52,13 +52,12 @@ describe("index.js", () => {
     command.customers.login("1234");
     expect(axios).toHaveBeenCalledWith({
       method: "put",
-      url: `http://localhost:4000/api/v1/customers/1234`,
+      url: `http://localhost:4000/api/v1/customers/login`,
       headers: {
         "x-api-key": "apiKey123"
       },
       data: {
-        isLoggedIn: true,
-        lastSeenAt: "2019-12-15T00:00:00.000Z"
+        customerId: "1234"
       }
     });
   });
@@ -75,13 +74,12 @@ describe("index.js", () => {
     command.customers.logout("1234");
     expect(axios).toHaveBeenCalledWith({
       method: "put",
-      url: `http://localhost:4000/api/v1/customers/1234`,
+      url: `http://localhost:4000/api/v1/customers/logout`,
       headers: {
         "x-api-key": "apiKey123"
       },
       data: {
-        isLoggedIn: false,
-        lastSeenAt: "2019-12-15T00:00:00.000Z"
+        customerId: "1234"
       }
     });
   });
