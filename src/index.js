@@ -87,14 +87,15 @@ class CommandAPI {
     });
   }
 
-  _logoutCustomer() {
-    if (!this.customerId) throw new Error("Must have a customerId to logout.");
+  _logoutCustomer(customerId) {
+    if (!customerId && !this.customerId)
+      throw new Error("Must have a customerId to logout.");
 
     return this._request(
       "put",
       `/customers/logout`,
       {
-        customerId: this.customerId
+        customerId: customerId || this.customerId
       },
       () => {
         this.customerId = null;
