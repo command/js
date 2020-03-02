@@ -73,9 +73,7 @@ class CommandAPI {
   }
 
   _logoutCustomer() {
-    if (!customerId) throw new Error("Must pass a customerId.");
-
-    console.log(this.customerId);
+    if (!this.customerId) throw new Error("Must have a customerId to logout.");
 
     return this._request(
       "put",

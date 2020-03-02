@@ -71,7 +71,8 @@ describe("index.js", () => {
 
   test("it can track a customer logout", () => {
     const command = new Command("apiKey123");
-    command.customers.logout("1234");
+    command.customers.login("1234"); // NOTE: Assigns the current customer internally.
+    command.customers.logout();
     expect(axios).toHaveBeenCalledWith({
       method: "put",
       url: `http://localhost:4000/api/v1/customers/logout`,
@@ -84,11 +85,11 @@ describe("index.js", () => {
     });
   });
 
-  test("it throws an error if no customerId is passed to customers.logout", () => {
+  test("it throws an error if no customerId is set on the command instance on customers.logout", () => {
     expect(() => {
       const command = new Command("apiKey123");
       command.customers.logout();
-    }).toThrow("Must pass a customerId.");
+    }).toThrow("Must have a customerId to logout.");
   });
 
   test("it can create a customer", () => {

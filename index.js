@@ -51,6 +51,7 @@ function () {
     key: "_request",
     value: function _request(method, path) {
       var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+      var callback = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
       // NOTE: http://localhost:4000/api is dynamically swapped to https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
       return (0, _axios["default"])({
         method: method,
@@ -60,6 +61,7 @@ function () {
         },
         data: data
       }).then(function (response) {
+        if (callbak) callback(response);
         return response;
       })["catch"](function (error) {
         if (error && error.response) {
@@ -92,11 +94,14 @@ function () {
     }
   }, {
     key: "_logoutCustomer",
-    value: function _logoutCustomer(customerId) {
-      if (!customerId) throw new Error("Must pass a customerId.");
-      this.customerId = null;
+    value: function _logoutCustomer() {
+      var _this = this;
+
+      if (!this.customerId) throw new Error("Must have a customerId to logout.");
       return this._request("put", "/customers/logout", {
-        customerId: customerId
+        customerId: this.customerId
+      }, function () {
+        _this.customerId = null;
       });
     }
   }, {
