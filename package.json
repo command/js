@@ -2,12 +2,13 @@
   "name": "@oncommandio/js",
   "version": "0.39.0",
   "description": "Official JavaScript library for the Command API.",
-  "main": "index.min.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "browser": "dist/index.umd.js",
   "scripts": {
     "release": "node ./release.js",
-    "build": "browserify ./src/index.js -o ./index.min.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-transform-runtime @babel/plugin-proposal-object-rest-spread @babel/plugin-proposal-class-properties ] ] && uglifyjs index.min.js -c -m -o index.min.js",
-    "build-old": "babel --presets @babel/preset-env src -d ./ --ignore src/index.test.js && uglifyjs index.js -c -m -o index.min.js",
-    "dev": "babel --presets @babel/preset-env src -d ./ --watch --ignore src/index.test.js",
+    "build": "rollup --c",
+    "dev": "rollup -c -w",
     "test": "jest",
     "test-watch": "jest --watch"
   },
@@ -22,22 +23,16 @@
   ],
   "author": "oncommandio",
   "license": "MIT",
-  "homepage": "https://portal.oncommand.io/docs/command-js/0.39.0/introduction",
+  "homepage": "https://portal.oncommand.io/docs/command-js/0.40.0/introduction",
   "dependencies": {
     "axios": "^0.19.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.7.5",
-    "@babel/core": "^7.7.5",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
-    "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/preset-env": "^7.7.6",
-    "@babel/runtime": "^7.8.4",
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
     "aws-sdk": "^2.590.0",
-    "babelify": "^10.0.0",
-    "browserify": "^16.5.0",
     "jest": "^25.0.0",
+    "rollup": "^1.32.0",
     "uglify-js": "^3.7.2"
   }
 }

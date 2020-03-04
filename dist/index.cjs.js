@@ -1,3 +1,5 @@
+'use strict';
+
 const axios = require("axios");
 
 class CommandAPI {
@@ -32,7 +34,7 @@ class CommandAPI {
     if (this.debug) {
       this._logDebugMessage({
         method,
-        url: `http://localhost:4000/api/v1${path}`,
+        url: `https://api.oncommand.io/v1${path}`,
         headers: {
           "x-api-key": this.apiKey
         },
@@ -40,10 +42,10 @@ class CommandAPI {
       });
     }
 
-    // NOTE: http://localhost:4000/api is dynamically swapped to https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
+    // NOTE: https://api.oncommand.io is dynamically swapped to https://api.oncommand.io in /release.js when releasing a new version. Leave as-is for local dev.
     return axios({
       method,
-      url: `http://localhost:4000/api/v1${path}`,
+      url: `https://api.oncommand.io/v1${path}`,
       headers: {
         "x-api-key": this.apiKey
       },
@@ -137,4 +139,4 @@ class CommandAPI {
   }
 }
 
-export default CommandAPI;
+module.exports = CommandAPI;

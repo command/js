@@ -15,6 +15,7 @@ AWS.config.update({
 });
 
 const s3 = new AWS.S3();
+const distributions = ["cjs", "esm", "umd"];
 
 const promiseExec = (command, messageIfError) => {
   try {
@@ -119,12 +120,15 @@ const setHomepageURL = version => {
 
 const setReleaseVersionInSource = version => {
   try {
-    const sourceContents = fs.readFileSync("./index.min.js", "utf-8");
-    const sourceContentsWithVersion = sourceContents.replace(
-      new RegExp('this.version=""'),
-      `this.version="${version}"`
-    );
-    fs.writeFileSync("./index.min.js", sourceContentsWithVersion);
+    distributions.forEach(distribution => {
+      const distributionPath = `./dist/index.${distribution}.js`;
+      const distributionContents = fs.readFileSync(distributionPath, "utf-8");
+      const distributionContentsWithVersion = distributionContents.replace(
+        new RegExp('this.version=""'),
+        `this.version="${version}"`
+      );
+      fs.writeFileSync(distributionPath, distributionContentsWithVersion);
+    });
   } catch (exception) {
     throw new Error(`[release.setReleaseVersionInSource] ${exception.message}`);
   }
@@ -132,14 +136,16 @@ const setReleaseVersionInSource = version => {
 
 const setProductionAPIURL = () => {
   try {
-    const sourceContents = fs.readFileSync("./index.min.js", "utf-8");
-    const developmentAPIRegex = new RegExp("http://localhost:4000/api", "ig");
-    const scriptContentsSanitized = sourceContents.replace(
-      developmentAPIRegex,
-      "https://api.oncommand.io"
-    );
-
-    fs.writeFileSync("./index.min.js", scriptContentsSanitized);
+    distributions.forEach(distribution => {
+      const distributionPath = `./dist/index.${distribution}.js`;
+      const distributionContents = fs.readFileSync(distributionPath, "utf-8");
+      const developmentAPIRegex = new RegExp("http://localhost:4000/api", "ig");
+      const distributionContentsSanitized = distributionContents.replace(
+        developmentAPIRegex,
+        "https://api.oncommand.io"
+      );
+      fs.writeFileSync(distributionPath, distributionContentsSanitized);
+    });
   } catch (exception) {
     throw new Error(`[release.setProductionAPIURL] ${exception.message}`);
   }
@@ -204,7 +210,7 @@ const release = async version => {
 
     await uploadScriptToS3(
       `${getMajorVerison(version)}/index.min.js`,
-      fs.readFileSync("./index.min.js", "utf-8")
+      fs.readFileSync("./dist/index.umd.js", "utf-8")
     );
     console.log("✅ Uploaded to Amazon S3!");
 
