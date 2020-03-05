@@ -28,7 +28,7 @@ class CommandAPI {
     );
   }
 
-  _request(method, path, data = {}, callback = null) {
+  _request(method, path, data = {}) {
     if (this.debug) {
       this._logDebugMessage({
         method,
@@ -50,8 +50,7 @@ class CommandAPI {
       data
     })
       .then(response => {
-        if (callbak) callback(response);
-        return response;
+        return response && response.data && response.data.data;
       })
       .catch(error => {
         if (error && error.response) {
