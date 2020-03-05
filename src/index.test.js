@@ -1,4 +1,4 @@
-const Command = require("../dist/index.umd");
+const Command = require("../dist/index.min");
 const axios = require("axios");
 
 jest.mock("axios");

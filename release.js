@@ -2,20 +2,6 @@
 
 const { exec } = require("child_process");
 const fs = require("fs");
-const AWS = require("aws-sdk");
-const settings = require("./settings.js");
-
-AWS.config = new AWS.Config();
-AWS.config.accessKeyId = settings.aws.accessKeyId;
-AWS.config.secretAccessKey = settings.aws.secretAccessKey;
-
-AWS.config.update({
-  signatureVersion: "v4",
-  region: "us-east-2"
-});
-
-const s3 = new AWS.S3();
-const distributions = ["cjs", "esm", "umd"];
 
 const promiseExec = (command, messageIfError) => {
   try {
@@ -41,31 +27,6 @@ const releaseToNPM = async version => {
     ); // NOTE: --access public is due to the scoped package (@oncommandio/js).
   } catch (exception) {
     throw new Error(`[release.releaseToNPM] ${exception.message}`);
-  }
-};
-
-const uploadScriptToS3 = (path, fileContents) => {
-  try {
-    return new Promise((resolve, reject) => {
-      s3.putObject(
-        {
-          Bucket: "command-js",
-          ACL: "public-read",
-          Key: path,
-          Body: fileContents,
-          ContentType: "text/javascript"
-        },
-        (error, response) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve();
-          }
-        }
-      );
-    });
-  } catch (exception) {
-    throw new Error(`[release.uploadScriptToS3] ${exception.message}`);
   }
 };
 
@@ -120,15 +81,12 @@ const setHomepageURL = version => {
 
 const setReleaseVersionInSource = version => {
   try {
-    distributions.forEach(distribution => {
-      const distributionPath = `./dist/index.${distribution}.js`;
-      const distributionContents = fs.readFileSync(distributionPath, "utf-8");
-      const distributionContentsWithVersion = distributionContents.replace(
-        new RegExp('this.version=""'),
-        `this.version="${version}"`
-      );
-      fs.writeFileSync(distributionPath, distributionContentsWithVersion);
-    });
+    const sourceContents = fs.readFileSync("./dist/index.min.js", "utf-8");
+    const sourceContentsWithVersion = sourceContents.replace(
+      new RegExp('this.version=""'),
+      `this.version="${version}"`
+    );
+    fs.writeFileSync("./dist/index.min.js", sourceContentsWithVersion);
   } catch (exception) {
     throw new Error(`[release.setReleaseVersionInSource] ${exception.message}`);
   }
@@ -136,16 +94,14 @@ const setReleaseVersionInSource = version => {
 
 const setProductionAPIURL = () => {
   try {
-    distributions.forEach(distribution => {
-      const distributionPath = `./dist/index.${distribution}.js`;
-      const distributionContents = fs.readFileSync(distributionPath, "utf-8");
-      const developmentAPIRegex = new RegExp("http://localhost:4000/api", "ig");
-      const distributionContentsSanitized = distributionContents.replace(
-        developmentAPIRegex,
-        "https://api.oncommand.io"
-      );
-      fs.writeFileSync(distributionPath, distributionContentsSanitized);
-    });
+    const sourceContents = fs.readFileSync("./dist/index.min.js", "utf-8");
+    const developmentAPIRegex = new RegExp("http://localhost:4000/api", "ig");
+    const scriptContentsSanitized = sourceContents.replace(
+      developmentAPIRegex,
+      "https://api.oncommand.io"
+    );
+
+    fs.writeFileSync("./dist/index.min.js", scriptContentsSanitized);
   } catch (exception) {
     throw new Error(`[release.setProductionAPIURL] ${exception.message}`);
   }
@@ -207,12 +163,6 @@ const release = async version => {
 
     await tagReleaseOnGit(version);
     console.log("✅ Version tag pushed to remote repo!");
-
-    await uploadScriptToS3(
-      `${getMajorVerison(version)}/index.min.js`,
-      fs.readFileSync("./dist/index.umd.js", "utf-8")
-    );
-    console.log("✅ Uploaded to Amazon S3!");
 
     await releaseToNPM(version);
     console.log("✅ Released to NPM!");
