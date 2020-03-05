@@ -30,7 +30,7 @@ describe("index.js", () => {
     command.track("an event");
     expect(axios).toHaveBeenCalledWith({
       method: "post",
-      url: `http://localhost:4000/api/v1/behavior`,
+      url: `https://api.oncommand.io/v1/behavior`,
       headers: {
         "x-api-key": "apiKey123"
       },
@@ -52,7 +52,7 @@ describe("index.js", () => {
     command.customers.login("1234");
     expect(axios).toHaveBeenCalledWith({
       method: "put",
-      url: `http://localhost:4000/api/v1/customers/login`,
+      url: `https://api.oncommand.io/v1/customers/login`,
       headers: {
         "x-api-key": "apiKey123"
       },
@@ -75,7 +75,7 @@ describe("index.js", () => {
     command.customers.logout();
     expect(axios).toHaveBeenCalledWith({
       method: "put",
-      url: `http://localhost:4000/api/v1/customers/logout`,
+      url: `https://api.oncommand.io/v1/customers/logout`,
       headers: {
         "x-api-key": "apiKey123"
       },
@@ -97,7 +97,7 @@ describe("index.js", () => {
     command.customers.create({ emailAddress: "test@test.com" });
     expect(axios).toHaveBeenCalledWith({
       method: "post",
-      url: `http://localhost:4000/api/v1/customers`,
+      url: `https://api.oncommand.io/v1/customers`,
       headers: {
         "x-api-key": "apiKey123"
       },
@@ -121,7 +121,7 @@ describe("index.js", () => {
     });
     expect(axios).toHaveBeenCalledWith({
       method: "put",
-      url: `http://localhost:4000/api/v1/customers/customerId123`,
+      url: `https://api.oncommand.io/v1/customers/customerId123`,
       headers: {
         "x-api-key": "apiKey123"
       },
@@ -150,7 +150,7 @@ describe("index.js", () => {
     command.customers.delete("customerId123");
     expect(axios).toHaveBeenCalledWith({
       method: "delete",
-      url: `http://localhost:4000/api/v1/customers/customerId123`,
+      url: `https://api.oncommand.io/v1/customers/customerId123`,
       headers: {
         "x-api-key": "apiKey123"
       },
